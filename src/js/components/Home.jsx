@@ -1,28 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+  const [WishList, SetWishList] = useState("");
+  const [items, setItems] = useState([]);
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+  const onimputChange = (e) => {
+    SetWishList(e.target.value);
+  };
+
+  const HandleKeyUp = (e) => {
+  if (e.key === "Enter" && WishList !== "") {
+    setItems([...items, WishList]);
+    SetWishList("");
+  }
+};
+
+  const handleDelete = (indexToDelete) => {
+    const updatedItems = items.filter((_, index) => index !== indexToDelete);
+    setItems(updatedItems);
+  };
+
+  return (
+    <div className="container mt-5 position-relative">
+      <label htmlFor="list" className="form-label">Wish List</label>
+      <input
+        placeholder="Wish List"
+        className="form-control"
+        id="list"
+        type="text"
+        value={WishList}
+        onChange={onimputChange}
+        onKeyUp={HandleKeyUp}
+      />
+      <ul className="list-group mt-3">
+        {items.map((item, index) => (
+          <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+            <p>{item}</p>
+            <button
+              className="btn btn-outline-danger btn-sm"
+              onClick={() => handleDelete(index)}>
+              X
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default Home;
